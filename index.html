@@ -95,7 +95,7 @@
             gap: 8px;
         }
 
-        select, input[type="number"] {
+        select, input[type="text"] {
             width: 100%;
             padding: 14px;
             border-radius: 12px;
@@ -135,7 +135,6 @@
             display: none;
         }
 
-        /* Resultados */
         .dashboard-header {
             text-align: center;
             padding: 25px;
@@ -231,13 +230,12 @@
         <p>Modelo Matemático Interativo de Investigação Ambiental</p>
     </header>
 
-    <!-- Formulário Avançado -->
     <div class="glass-card" id="form-card">
-        <form id="calculator-form" class="grid-form">
+        <div class="grid-form">
             
             <div class="form-group">
                 <label>1. Consumo diário de água (Litros):</label>
-                <input type="number" id="agua-litros" min="0" step="0.5" value="2" required>
+                <input type="text" id="agua-litros" value="2" placeholder="Ex: 2 ou 2.5">
             </div>
 
             <div class="form-group">
@@ -296,10 +294,9 @@
             </div>
 
             <button type="button" class="btn" onclick="calcularExposicao()">Calcular Modelo Matemático</button>
-        </form>
+        </div>
     </div>
 
-    <!-- Painel de Resultados Avançado -->
     <div class="glass-card hidden" id="result-card">
         <div class="dashboard-header">
             <h3>Estimativa Total de Exposição</h3>
@@ -353,4 +350,92 @@
                 E = ∑ ( Cᵢ · Qᵢ )
             </div>
             <br>
-            Onde <strong>Cᵢ</strong> representa a
+            Onde <strong>Cᵢ</strong> representa a concentração média relatada pela literatura científica por unidade de consumo, e <strong>Qᵢ</strong> é a frequência reportada pelo utilizador.
+        </div>
+
+        <button type="button" class="btn" style="margin-top: 25px; background: rgba(255, 255, 255, 0.1);" onclick="refazerTeste()">Refazer Teste / Alterar Parâmetros</button>
+    </div>
+
+    <footer>
+        Projeto de Divulgação Científica | Feira de Matemática
+    </footer>
+</div>
+
+<script>
+    function calcularExposicao() {
+        let rawAgua = document.getElementById('agua-litros').value || '2';
+        rawAgua = rawAgua.replace(',', '.');
+        const litrosAgua = parseFloat(rawAgua) || 2;
+
+        const origemAgua = document.getElementById('agua-origem').value;
+        const recipientesQuentes = document.getElementById('recipientes-quentes').value;
+        const frutosMar = parseInt(document.getElementById('frutos-mar').value) || 0;
+        const alimentosEmbalados = document.getElementById('alimentos-embalados').value;
+        const chaSaquinho = parseInt(document.getElementById('cha-saquinho').value) || 0;
+        const arAmbiente = document.getElementById('ar-ambiente').value;
+
+        let concAgua = 5;
+        if (origemAgua === 'garrafa') concAgua = 90;
+        if (origemAgua === 'galao') concAgua = 30;
+        if (origemAgua === 'torneira') concAgua = 15;
+        const expAgua = litrosAgua * concAgua;
+
+        let expEmbalagens = 10;
+        if (recipientesQuentes === 'as_vezes') expEmbalagens += 40;
+        if (recipientesQuentes === 'frequente') expEmbalagens += 120;
+        if (chaSaquinho > 0) expEmbalagens += (chaSaquinho / 7) * 80;
+
+        let expAlimentos = frutosMar * 20;
+        if (alimentosEmbalados === 'medio') expAlimentos += 25;
+        if (alimentosEmbalados === 'alto') expAlimentos += 60;
+
+        let expAr = 15;
+        if (arAmbiente === 'medio') expAr = 35;
+        if (arAmbiente === 'alto') expAr = 70;
+
+        const totalDiario = Math.round(expAgua + expEmbalagens + expAlimentos + expAr);
+        const totalAnual = totalDiario * 365;
+
+        document.getElementById('total-diario').innerText = totalDiario.toLocaleString('pt-BR');
+        document.getElementById('total-anual').innerText = totalAnual.toLocaleString('pt-BR');
+
+        document.getElementById('val-agua').innerText = Math.round(expAgua) + ' part/dia';
+        document.getElementById('val-embalagens').innerText = Math.round(expEmbalagens) + ' part/dia';
+        document.getElementById('val-alimentos').innerText = Math.round(expAlimentos) + ' part/dia';
+        document.getElementById('val-ar').innerText = Math.round(expAr) + ' part/dia';
+
+        const badge = document.getElementById('status-badge');
+        if (totalDiario < 100) {
+            badge.innerText = 'Exposição Baixa';
+            badge.style.background = 'rgba(52, 211, 153, 0.2)';
+            badge.style.color = '#34d399';
+        } else if (totalDiario < 250) {
+            badge.innerText = 'Exposição Moderada';
+            badge.style.background = 'rgba(251, 191, 36, 0.2)';
+            badge.style.color = '#fbbf24';
+        } else {
+            badge.innerText = 'Exposição Elevada';
+            badge.style.background = 'rgba(248, 113, 113, 0.2)';
+            badge.style.color = '#f87171';
+        }
+
+        const soma = (expAgua + expEmbalagens + expAlimentos + expAr) || 1;
+        document.getElementById('bar-agua').style.width = ((expAgua / soma) * 100) + '%';
+        document.getElementById('bar-embalagens').style.width = ((expEmbalagens / soma) * 100) + '%';
+        document.getElementById('bar-alimentos').style.width = ((expAlimentos / soma) * 100) + '%';
+        document.getElementById('bar-ar').style.width = ((expAr / soma) * 100) + '%';
+
+        document.getElementById('form-card').classList.add('hidden');
+        document.getElementById('result-card').classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function refazerTeste() {
+        document.getElementById('result-card').classList.add('hidden');
+        document.getElementById('form-card').classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
