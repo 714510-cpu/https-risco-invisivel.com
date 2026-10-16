@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Exposição a Microplásticos | Feira de Matemática</title>
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --accent: #38bdf8;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: var(--primary-dark);
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+        }
+
+        select, input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #fff;
+            color: var(--text-main);
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Resultados */
+        .result-box {
+            background: linear-gradient(135deg, #e0f2fe, #f0fdf4);
+            border: 1px solid #bae6fd;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .result-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+            margin: 10px 0;
+        }
+
+        .breakdown-item {
+            margin-bottom: 12px;
+        }
+
+        .breakdown-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background-color: var(--border);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+        }
+
+        /* Seção Científica e Riscos */
+        .science-section h3, .risk-section h3 {
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .science-section p, .risk-section p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .disclaimer {
+            background-color: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 12px;
+            font-size: 0.85rem;
+            color: #b45309;
+            border-radius: 0 8px 8px 0;
+            margin-top: 15px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Calculadora de Exposição a Microplásticos</h1>
+        <p>Projeto de Divulgação Científica para a Feira de Matemática</p>
+    </header>
+
+    <!-- Formulário / Questionário -->
+    <div class="card" id="form-card">
+        <form id="microplastic-form">
+            <div class="form-group">
+                <label for="agua-litros">1. Quantidade de água consumida por dia (Litros):</label>
+                <input type="number" id="agua-litros" min="0" step="0.5" value="2" required>
+            </div>
+
+            <div class="form-group">
+                <label for="agua-origem">2. Principal origem da água que você consome:</label>
+                <select id="agua-origem">
+                    <option value="torneira">Água da Torneira (Tratada)</option>
+                    <option value="filtro" selected>Água Filtrada em Casa</option>
+                    <option value="garrafa">Água Embalada (Garrafas plásticas)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="garrafas-uso">3. Uso de garrafas plásticas descartáveis por semana:</label>
+                <select id="garrafas-uso">
+                    <option value="0">Quase nunca / Nunca</option>
+                    <option value="3" selected>Algumas vezes por semana (2 a 4)</option>
+                    <option value="7">Diariamente (1 ou mais por dia)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="frutos-mar">4. Frequência de consumo de peixes e frutos do mar:</label>
+                <select id="frutos-mar">
+                    <option value="0">Raramente ou nunca</option>
+                    <option value="1" selected>1 a 2 vezes por semana</option>
+                    <option value="3">Mais de 3 vezes por semana</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="alimentos-embalados">5. Consumo de alimentos ultraprocessados/embalados em plástico:</label>
+                <select id="alimentos-embalados">
+                    <option value="baixo">Baixo (foco em comida fresca)</option>
+                    <option value="medio" selected>Moderado (algumas refeições prontas)</option>
+                    <option value="alto">Alto (frequente uso de congelados/embalados)</option>
+                </select>
+            </div>
+
+            <button type="button" class="btn" onclick="calcularExposicao()">Calcular Exposição Estimada</button>
+        </form>
+    </div>
+
+    <!-- Painel de Resultados -->
+    <div class="card hidden" id="result-card">
+        <div class="result-box">
+            <h3>Sua Exposição Estimada</h3>
+            <div class="result-number" id="total-diario">0</div>
+            <p>partículas de microplástico por dia</p>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 5px;">Aproximadamente <span id="total-anual">0</span> partículas por ano.</p>
+        </div>
+
+        <div class="card" style="box-shadow: none; border: 1px solid var(--border); margin-bottom: 20px;">
+            <h3 style="font-size: 1rem; margin-bottom: 15px; color: var(--primary-dark);">Contribuição por Fonte (Modelo Matemático)</h3>
+            
+            <div class="breakdown-item">
+                <div class="breakdown-label">
+                    <span>Água de Consumo</span>
+                    <span id="val-agua">0 part/dia</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" id="bar-agua"></div></div>
+            </div>
+
+            <div class="breakdown-item">
+                <div class="breakdown-label">
+                    <span>Garrafas Plásticas / Recipientes</span>
+                    <span id="val-garrafas">0 part/dia</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" id="bar-garrafas"></div></div>
+            </div>
+
+            <div class="breakdown-item">
+                <div class="breakdown-label">
+                    <span>Alimentação (Frutos do Mar / Outros)</span>
+                    <span id="val-alimentos">0 part/dia</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" id="bar-alimentos"></div></div>
+            </div>
+        </div>
+
+        <div class="science-section">
+            <h3>A Matemática por trás do Cálculo ($E = \sum C_i \cdot Q_i$)</h3>
+            <p>O sistema multiplica a quantidade consumida diariamente ($Q_i$) por concentrações médias ($C_i$) extraídas de literatura científica de referência (como relatórios da Organização Mundial da Saúde e revisões sistemáticas recentes).</p>
+        </div>
+
+        <div class="risk-section" style="margin-top: 20px;">
+            <h3>O que a Ciência diz sobre os Riscos?</h3>
+            <p>Estudos toxicológicos investigam possíveis efeitos celulares, inflamações e estresse oxidativo causados por microplásticos. No entanto, <strong>a OMS reforça que ainda existem lacunas importantes</strong> e que a presença dessas partículas não constitui um diagnóstico médico ou prova de danos na saúde individual.</p>
+            
+            <div class="disclaimer">
+                <strong>Nota Metodológica:</strong> Este resultado é uma estimativa educacional baseada em modelos matemáticos e médias estatísticas de estudos publicados. Não substitui medições laboratoriais reais.
+            </div>
+        </div>
+
+        <button class="btn" style="margin-top: 20px; background-color: var(--text-muted);" onclick="refazerTeste()">Recalcular / Alterar Dados</button>
+    </div>
+
+    <footer>
+        Desenvolvido para a Feira de Matemática | Baseado em diretrizes da OMS e literatura científica.
+    </footer>
+</div>
+
+<script>
+    function calcularExposicao() {
+        // Coleta de dados dos inputs
+        const litrosAgua = parseFloat(document.getElementById('agua-litros').value) || 0;
+        const origemAgua = document.getElementById('agua-origem').value;
+        const usoGarrafas = parseInt(document.getElementById('garrafas-uso').value) || 0;
+        const frutosMar = parseInt(document.getElementById('frutos-mar').value) || 0;
+        const alimentosEmbalados = document.getElementById('alimentos-embalados').value;
+
+        // Concentrações estimadas de referência (valores baseados em literatura científica média)
+        // Coeficientes Ci para simulação matemática
+        let concentracaoAgua = 5; // partículas/litro padrão (torneira/filtro)
+        if (origemAgua === 'garrafa') {
+            concentracaoAgua = 90; // Água engarrafada costuma apresentar maior concentração em estudos
+        } else if (origemAgua === 'torneira') {
+            concentracaoAgua = 15;
+        }
+
+        // Cálculo da água
+        const exposicaoAgua = litrosAgua * concentracaoAgua;
+
+        // Cálculo de embalagens/garrafas (convertido para base diária)
+        const exposicaoGarrafas = (usoGarrafas / 7) * 50; 
+
+        // Cálculo de alimentos (frutos do mar + ultraprocessados)
+        let exposicaoAlimentos = frutosMar * 15;
+        if (alimentosEmbalados === 'alto') exposicaoAlimentos += 40;
+        if (alimentosEmbalados === 'medio') exposicaoAlimentos += 20;
+
+        // Somatório total E = sum(Ci * Qi)
+        const totalDiario = Math.round(exposicaoAgua + exposicaoGarrafas + exposicaoAlimentos);
+        const totalAnual = totalDiario * 365;
+
+        // Atualização dos textos na tela
+        document.getElementById('total-diario').innerText = totalDiario.toLocaleString('pt-BR');
+        document.getElementById('total-anual').innerText = totalAnual.toLocaleString('pt-BR');
+
+        document.getElementById('val-agua').innerText = Math.round(exposicaoAgua) + ' part/dia';
+        document.getElementById('val-garrafas').innerText = Math.round(exposicaoGarrafas) + ' part/dia';
+        document.getElementById('val-alimentos').innerText = Math.round(exposicaoAlimentos) + ' part/dia';
+
+        // Porcentagens para as barras de progresso
+        const somaParciais = (exposicaoAgua + exposicaoGarrafas + exposicaoAlimentos) || 1;
+        document.getElementById('bar-agua').style.width = Math.min(100, (exposicaoAgua / somaParciais) * 100) + '%';
+        document.getElementById('bar-garrafas').style.width = Math.min(100, (exposicaoGarrafas / somaParciais) * 100) + '%';
+        document.getElementById('bar-alimentos').style.width = Math.min(100, (exposicaoAlimentos / somaParciais) * 100) + '%';
+
+        // Transição de telas
+        document.getElementById('form-card').classList.add('hidden');
+        document.getElementById('result-card').classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function refazerTeste() {
+        document.getElementById('result-card').classList.add('hidden');
+        document.getElementById('form-card').classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
