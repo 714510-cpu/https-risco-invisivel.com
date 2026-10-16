@@ -40,6 +40,26 @@
             max-width: 900px;
         }
 
+        /* Banner de Impacto */
+        .banner-container {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .banner-img {
+            width: 100%;
+            max-width: 850px;
+            height: auto;
+            border-radius: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            transition: transform 0.3s ease;
+        }
+
+        .banner-img:hover {
+            transform: scale(1.01);
+        }
+
         header {
             text-align: center;
             margin-bottom: 35px;
@@ -225,6 +245,12 @@
 <body>
 
 <div class="container">
+    
+    <!-- Banner Visual do Projeto -->
+    <div class="banner-container">
+        <img src="banner.png" alt="Perigo: Amostra Contaminada por Microplásticos" class="banner-img">
+    </div>
+
     <header>
         <h1>Calculadora de Exposição a Microplásticos</h1>
         <p>Modelo Matemático Interativo de Investigação Ambiental</p>
