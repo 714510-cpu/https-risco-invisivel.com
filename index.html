@@ -1,503 +1,125 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MicroVida | Investigação educativa sobre microplásticos</title>
-
-    <style>
-        :root {
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
-            --card-bg: rgba(255, 255, 255, 0.07);
-            --card-border: rgba(255, 255, 255, 0.12);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent-cyan: #38bdf8;
-            --accent-purple: #a855f7;
-            --accent-green: #34d399;
-            --accent-warning: #fbbf24;
-            --accent-danger: #f87171;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
-
-        body {
-            background: var(--bg-gradient);
-            color: var(--text-main);
-            min-height: 100vh;
-            padding: 30px 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 900px;
-        }
-
-        .banner-container {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .banner-img {
-            width: 100%;
-            max-width: 850px;
-            height: auto;
-            border-radius: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-            transition: transform 0.3s ease;
-        }
-
-        .banner-img:hover {
-            transform: scale(1.01);
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 35px;
-        }
-
-        header h1 {
-            font-size: 2.2rem;
-            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-            font-weight: 800;
-        }
-
-        header p {
-            color: var(--text-muted);
-            font-size: 1rem;
-        }
-
-        .glass-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            margin-bottom: 25px;
-        }
-
-        .grid-form {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .form-group.full-width {
-            grid-column: 1 / -1;
-        }
-
-        label {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--accent-cyan);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        select,
-        input[type="number"] {
-            width: 100%;
-            padding: 14px;
-            border-radius: 12px;
-            border: 1px solid var(--card-border);
-            background: rgba(15, 23, 42, 0.6);
-            color: #fff;
-            font-size: 0.95rem;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        select:focus,
-        input:focus {
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
-        }
-
-        select option {
-            background: #0f172a;
-            color: white;
-        }
-
-        .btn {
-            grid-column: 1 / -1;
-            padding: 16px;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(90deg, #0284c7, #7c3aed);
-            color: #fff;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 10px;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4);
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .dashboard-header {
-            text-align: center;
-            padding: 25px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 16px;
-            border: 1px solid var(--card-border);
-            margin-bottom: 25px;
-        }
-
-        .big-number {
-            font-size: 3.2rem;
-            font-weight: 900;
-            background: linear-gradient(90deg, #38bdf8, #34d399);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 10px 0;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            margin-top: 10px;
-            text-transform: none;
-            letter-spacing: 0;
-        }
-
-        .breakdown-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .metric-item {
-            background: rgba(15, 23, 42, 0.4);
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .metric-header {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-        }
-
-        .progress-bg {
-            height: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            border-radius: 5px;
-            transition: width 0.8s ease-out;
-        }
-
-        .info-box {
-            background: rgba(56, 189, 248, 0.05);
-            border-left: 4px solid var(--accent-cyan);
-            padding: 15px;
-            border-radius: 0 12px 12px 0;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            color: var(--text-muted);
-        }
-
-        .info-box strong {
-            color: var(--text-main);
-        }
-
-        .science-section {
-            margin-top: 25px;
-        }
-
-        .science-section h3 {
-            color: var(--accent-cyan);
-            margin-bottom: 12px;
-        }
-
-        .science-section p,
-        .science-section li {
-            color: var(--text-muted);
-            line-height: 1.65;
-        }
-
-        .science-section ul {
-            padding-left: 22px;
-            margin-top: 10px;
-        }
-
-        .science-section a,
-        .source-card a {
-            color: var(--accent-cyan);
-            font-weight: 700;
-            overflow-wrap: anywhere;
-        }
-
-        .source-card {
-            padding: 14px;
-            border: 1px solid var(--card-border);
-            border-radius: 12px;
-            margin-top: 12px;
-            background: rgba(15, 23, 42, .28);
-        }
-
-        .warning-box {
-            background: rgba(251, 191, 36, .08);
-            border-left: 4px solid var(--accent-warning);
-            padding: 15px;
-            border-radius: 0 12px 12px 0;
-            margin-top: 18px;
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-
-        .warning-box strong {
-            color: var(--text-main);
-        }
-
-        .small-note {
-            color: var(--text-muted);
-            font-size: .82rem;
-            line-height: 1.55;
-            margin-top: 12px;
-        }
-
-        .projection-controls {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 12px;
-            margin: 16px 0;
-        }
-
-        .projection-controls label {
-            color: var(--text-main);
-        }
-
-        .projection-controls input {
-            width: 100px;
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid var(--card-border);
-            background: rgba(15, 23, 42, .6);
-            color: #fff;
-        }
-
-        .chart-list {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            margin-top: 18px;
-        }
-
-        .chart-row {
-            display: grid;
-            grid-template-columns: minmax(105px, 135px) 1fr;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .chart-label {
-            font-size: .88rem;
-            color: var(--text-main);
-        }
-
-        .chart-track {
-            height: 24px;
-            background: rgba(255, 255, 255, .08);
-            border-radius: 7px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .chart-bar {
-            height: 100%;
-            min-width: 3px;
-            border-radius: 7px;
-            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
-        }
-
-        .chart-value {
-            grid-column: 2;
-            color: var(--text-muted);
-            font-size: .82rem;
-            margin-top: -8px;
-            line-height: 1.5;
-            overflow-wrap: anywhere;
-        }
-
-        footer {
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            margin-top: 20px;
-            line-height: 1.6;
-        }
-
-        @media (max-width: 520px) {
-            body {
-                padding: 20px 10px;
-            }
-
-            header h1 {
-                font-size: 1.8rem;
-            }
-
-            .chart-row {
-                grid-template-columns: 100px 1fr;
-                gap: 8px;
-            }
-
-            .chart-label {
-                font-size: .8rem;
-            }
-
-            .glass-card {
-                padding: 20px;
-            }
-
-            .big-number {
-                font-size: 2.7rem;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="MicroVida: simulador educativo sobre hábitos e microplásticos.">
+<title>MicroVida | Simulador educativo</title>
+<style>
+:root{--bg:#0b1120;--panel:rgba(255,255,255,.065);--border:rgba(255,255,255,.14);--text:#f8fafc;--muted:#b8c4d5;--cyan:#38bdf8;--purple:#a78bfa;--green:#34d399;--yellow:#fbbf24}
+*{box-sizing:border-box}body{margin:0;padding:24px 14px;background:radial-gradient(ellipse at top,#25214d,#101827 48%,#080d18);color:var(--text);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}.container{max-width:900px;margin:auto}header{text-align:center;margin:24px 0}h1{font-size:clamp(2rem,5vw,3rem);line-height:1.2;margin:0;background:linear-gradient(90deg,var(--cyan),var(--purple));background-clip:text;-webkit-background-clip:text;color:transparent}header p,.muted,p,li{color:var(--muted)}.banner{width:100%;max-height:250px;object-fit:cover;border-radius:16px;border:1px solid var(--border)}.card{background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:clamp(18px,4vw,28px);margin:20px 0;box-shadow:0 14px 35px #0003}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:18px}.group{display:flex;flex-direction:column;gap:7px}.group label{color:#7dd3fc;font-weight:650;font-size:.93rem}select,input{width:100%;min-height:44px;padding:10px;border-radius:10px;background:#111c30;color:white;border:1px solid var(--border);font:inherit}button{font:inherit;cursor:pointer}.btn{border:0;border-radius:11px;padding:13px 17px;color:white;font-weight:700;background:linear-gradient(100deg,#0284c7,#7c3aed)}.btn:hover{filter:brightness(1.1)}.grid>.btn{grid-column:1/-1}.notice,.info{padding:14px 16px;border-radius:0 11px 11px 0;margin:16px 0;color:var(--muted)}.notice{border-left:4px solid var(--yellow);background:#fbbf2410}.info{border-left:4px solid var(--cyan);background:#38bdf810}.notice strong,.info strong{color:var(--text)}.hidden{display:none!important}.summary{text-align:center;padding:22px;background:#ffffff06;border:1px solid var(--border);border-radius:15px}.score{font-size:clamp(2.8rem,8vw,4rem);font-weight:900;line-height:1.2;margin:10px;background:linear-gradient(90deg,var(--cyan),var(--green));background-clip:text;-webkit-background-clip:text;color:transparent}.pill{display:inline-block;padding:5px 12px;border-radius:99px;background:#38bdf81b;color:#7dd3fc;font-size:.85rem}.metrics{display:grid;gap:13px;margin:18px 0}.metric{background:#0f172a99;padding:14px;border-radius:11px}.metric-head{display:flex;justify-content:space-between;gap:10px;font-size:.9rem;margin-bottom:8px}.track,.chart-track{height:11px;background:#ffffff17;border-radius:99px;overflow:hidden}.bar{height:100%;width:0;border-radius:99px;transition:width .4s}.projection{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:16px 0}.projection input{width:100px}.chart-list{display:grid;gap:16px}.chart-row{display:grid;grid-template-columns:135px minmax(60px,1fr);gap:8px 12px;align-items:center}.chart-track{height:23px;border-radius:6px}.chart-bar{height:100%;min-width:2px;background:linear-gradient(90deg,var(--cyan),var(--purple));border-radius:6px}.chart-value{grid-column:2;font-size:.82rem;overflow-wrap:anywhere}h2{font-size:1.4rem}h3{color:#7dd3fc;margin:22px 0 8px}ul{padding-left:22px}li{margin:8px 0}a{color:#7dd3fc;overflow-wrap:anywhere}.source{padding:13px;margin-top:12px;border:1px solid var(--border);border-radius:11px;background:#0f172a77}.source p{margin-bottom:0}footer{text-align:center;color:var(--muted);font-size:.85rem;margin:28px 0 8px}@media(max-width:480px){.chart-row{grid-template-columns:100px minmax(60px,1fr)}}
+</style>
 </head>
-
 <body>
-<div class="container">
+<main class="container">
+<img class="banner" src="banner.png" alt="Banner do projeto MicroVida" onerror="this.hidden=true">
+<header><h1>MicroVida</h1><p>Simulador educativo de hábitos, microplásticos e investigação científica</p></header>
+<div class="notice"><strong>Importante:</strong> este questionário não mede a exposição real. O índice é didático, não validado clinicamente, e não representa risco individual de doença.</div>
 
-    <div class="banner-container">
-        <img
-            src="banner.png"
-            alt="Ilustração de investigação sobre microplásticos"
-            class="banner-img"
-            onerror="this.style.display='none'"
-        >
-    </div>
+<section class="card" id="form-card">
+<h2>Investigue seus hábitos</h2><p>Escolha as alternativas que melhor representam sua rotina. As respostas são processadas somente no navegador.</p>
+<form id="survey" class="grid">
+<div class="group"><label for="agua-litros">1. Consumo diário aproximado de água</label><select id="agua-litros">
+<option value=".5">Até 0,5 L</option><option value=".75">0,75 L</option><option value="1">1 L</option><option value="1.25">1,25 L</option><option value="1.5">1,5 L</option><option value="1.75">1,75 L</option><option value="2" selected>2 L</option><option value="2.25">2,25 L</option><option value="2.5">2,5 L</option><option value="2.75">2,75 L</option><option value="3">3 L</option><option value="3.25">3,25 L</option><option value="3.5">3,5 L</option><option value="3.75">3,75 L</option><option value="4">4 L ou mais</option></select></div>
+<div class="group"><label for="agua-origem">2. Principal fonte de água</label><select id="agua-origem">
+<option value="filtro">Filtro doméstico comum</option><option value="filtro">Filtro de barro</option><option value="filtro">Purificador com carvão ativado</option><option value="filtro">Outro purificador</option><option value="torneira">Torneira sem filtrar</option><option value="torneira">Água fervida</option><option value="torneira">Bebedouro público</option><option value="garrafa">Garrafa PET descartável ocasionalmente</option><option value="garrafa">Garrafa PET descartável diariamente</option><option value="galao">Galão plástico retornável</option><option value="galao">Bombona plástica entregue em casa</option><option value="torneira">Poço tratado e testado</option><option value="torneira">Nascente testada</option><option value="torneira">Embalagem de vidro</option><option value="torneira">Outra fonte / não sei</option></select></div>
+<div class="group"><label for="recipientes-quentes">3. Frequência de aquecimento em plástico</label><select id="recipientes-quentes">
+<option value="nunca">Nunca</option><option value="nunca">Uso sempre vidro</option><option value="nunca">Uso sempre cerâmica</option><option value="nunca">Aqueço na panela e transfiro</option><option value="as_vezes">Raramente</option><option value="as_vezes">Uma vez por semana</option><option value="as_vezes">Duas vezes por semana</option><option value="as_vezes">Três vezes por semana</option><option value="as_vezes">Quatro vezes por semana</option><option value="as_vezes">Cinco vezes por semana</option><option value="frequente">Uma vez por dia</option><option value="frequente">Duas vezes por dia</option><option value="frequente">Três vezes por dia</option><option value="frequente">Uso plástico com líquidos quentes diariamente</option><option value="frequente">Uso no micro-ondas quase todos os dias</option></select></div>
+<div class="group"><label for="frutos-mar">4. Frequência de peixes ou frutos do mar</label><select id="frutos-mar">
+<option value="0">Nunca</option><option value="0">Menos de uma vez por mês</option><option value="0">Uma vez por mês</option><option value="0">Duas vezes por mês</option><option value="1">Uma vez por semana</option><option value="1" selected>Duas vezes por semana</option><option value="3">Três vezes por semana</option><option value="3">Quatro vezes por semana</option><option value="3">Cinco vezes por semana</option><option value="3">Seis vezes por semana</option><option value="3">Todos os dias</option><option value="3">Duas refeições por dia</option><option value="3">Peixe quase todos os dias</option><option value="3">Frutos do mar quase todos os dias</option><option value="1">Varia muito / não sei</option></select></div>
+<div class="group"><label for="alimentos-embalados">5. Alimentos embalados ou fast-food</label><select id="alimentos-embalados">
+<option value="baixo">Quase nunca</option><option value="baixo">Uma vez por semana ou menos</option><option value="baixo">Duas vezes por semana</option><option value="baixo">Três vezes por semana</option><option value="baixo">Maioria das refeições feita em casa</option><option value="medio" selected>Alguns dias da semana</option><option value="medio">Um alimento embalado por dia</option><option value="medio">Dois alimentos embalados por dia</option><option value="medio">Lanches embalados algumas vezes por semana</option><option value="medio">Fast-food uma vez por semana</option><option value="alto">Fast-food 2 a 3 vezes por semana</option><option value="alto">Fast-food 4 ou mais vezes por semana</option><option value="alto">Alimentos prontos quase todos os dias</option><option value="alto">Muitos lanches individuais diariamente</option><option value="alto">Maior parte da alimentação é embalada/pronta</option></select></div>
+<div class="group"><label for="cha-saquinho">6. Frequência de chá em saquinhos</label><select id="cha-saquinho">
+<option value="0" selected>Não tomo chá em saquinho</option><option value="0">Chá de folhas soltas</option><option value="0">Infusor de aço inoxidável</option><option value="2">Uma xícara por semana</option><option value="2">Duas xícaras por semana</option><option value="2">Três xícaras por semana</option><option value="2">Quatro xícaras por semana</option><option value="2">Cinco xícaras por semana</option><option value="2">Seis xícaras por semana</option><option value="7">Uma xícara por dia</option><option value="7">Duas xícaras por dia</option><option value="7">Três xícaras por dia</option><option value="7">Quatro xícaras por dia</option><option value="7">Cinco ou mais por dia</option><option value="2">Ocasional / não sei</option></select></div>
+<div class="group"><label for="ar-ambiente">7. Tempo em ambientes fechados, com ar-condicionado ou carpetes</label><select id="ar-ambiente">
+<option value="baixo">Menos de uma hora por dia</option><option value="baixo">Uma hora por dia</option><option value="baixo">Duas horas por dia</option><option value="baixo">Ambiente aberto na maior parte do dia</option><option value="baixo">Casa bem ventilada, pouca poeira</option><option value="medio" selected>Três a quatro horas por dia</option><option value="medio">Cinco horas por dia</option><option value="medio">Seis horas por dia</option><option value="medio">Sala de aula parte do dia</option><option value="medio">Ar-condicionado algumas horas</option><option value="alto">Sete a oito horas por dia</option><option value="alto">Nove a dez horas por dia</option><option value="alto">Mais de dez horas por dia</option><option value="alto">Carpetes/tecidos e pouca ventilação</option><option value="alto">Muita poeira e pouca ventilação</option></select></div>
+<button class="btn" type="submit">Analisar meu perfil de hábitos</button>
+</form>
+</section>
 
-    <header>
-        <h1>Calculadora de Exposição a Microplásticos</h1>
-        <p>Simulador educativo de hábitos, exposição potencial e evidências científicas</p>
-    </header>
+<section class="card hidden" id="result-card" aria-live="polite">
+<div class="summary"><h2>Resumo educativo do perfil</h2><div class="score" id="score">—</div><p>Índice didático de hábitos (0–100)</p><p id="score-note">Não representa partículas por dia ou por ano.</p><span class="pill">Indicador educativo, não clínico</span></div>
+<h3>Indicadores relativos por grupo de hábitos</h3><p>As barras mostram pontos definidos pelo modelo educativo, não medições científicas.</p>
+<div class="metrics">
+<div class="metric"><div class="metric-head"><span>Água e bebidas</span><span id="val-agua">—</span></div><div class="track"><div class="bar" id="bar-agua" style="background:var(--cyan)"></div></div></div>
+<div class="metric"><div class="metric-head"><span>Recipientes e embalagens</span><span id="val-embalagens">—</span></div><div class="track"><div class="bar" id="bar-embalagens" style="background:var(--purple)"></div></div></div>
+<div class="metric"><div class="metric-head"><span>Dieta e alimentos</span><span id="val-alimentos">—</span></div><div class="track"><div class="bar" id="bar-alimentos" style="background:var(--green)"></div></div></div>
+<div class="metric"><div class="metric-head"><span>Ar e poeira doméstica</span><span id="val-ar">—</span></div><div class="track"><div class="bar" id="bar-ar" style="background:var(--yellow)"></div></div></div>
+</div>
+<div class="card" style="padding:20px;background:#0f172a99"><h3>Projeção matemática de partículas por período</h3><p>Um estudo específico estimou 2.012 ± 598 partículas por pessoa por dia a partir de fontes de exposição analisadas. Esse valor não é universal e não calcula a exposição pessoal pelas respostas deste questionário.</p>
+<div class="projection"><label for="anos-projecao">Anos na projeção:</label><input id="anos-projecao" type="number" min="1" max="120" value="80"><button class="btn" id="update-chart" type="button">Atualizar gráfico</button></div>
+<p>As barras usam escala logarítmica. A projeção multiplica o cenário diário pelo número de dias; não significa que as partículas se acumulem no corpo.</p><div id="grafico-particulas" class="chart-list"></div>
+<div class="info"><strong>Como ler:</strong> valor central de 2.012 partículas/dia e faixa ilustrativa de 1.414 a 2.610. Não é um intervalo universal para cada pessoa.</div></div>
+<div class="info" id="interpretacao"></div>
+<div class="notice"><strong>Limite científico:</strong> o índice não mede exposição real, absorção pelo organismo ou risco médico. Não há fórmula validada que converta estas sete respostas em partículas ingeridas ou inaladas por dia.</div>
+<button class="btn" id="reset" type="button" style="width:100%">Refazer teste / alterar respostas</button>
+</section>
 
-    <div class="warning-box" style="margin-bottom:22px">
-        <strong>Nota sobre os números:</strong>
-        estudos científicos não oferecem coeficientes universais que permitam converter
-        diretamente todas estas respostas em partículas por dia. Para evitar precisão falsa,
-        o resultado desta versão é um índice educativo de hábitos, explicitamente não validado
-        clinicamente. As fontes científicas ao final explicam as limitações atuais.
-    </div>
+<section class="card">
+<h2>O que a ciência sabe — e o que ainda não sabe</h2>
+<p>Microplásticos são pequenas partículas de plástico. A exposição pode ocorrer por ingestão e inalação, mas as estimativas variam conforme as amostras, o tamanho das partículas detectadas e os métodos de análise.</p>
+<h3>O que podem prejudicar no organismo?</h3>
+<p>Pesquisas investigam possíveis efeitos, mas é importante separar resultados experimentais de efeitos comprovados em seres humanos. Estudos em células ou animais não demonstram automaticamente que os mesmos efeitos ocorram em pessoas nas condições habituais de exposição.</p>
+<ul>
+<li><strong>Sistema digestivo:</strong> estudos experimentais investigam inflamação intestinal e respostas celulares. Ainda não é possível prever o risco individual por este questionário.</li>
+<li><strong>Sistema respiratório:</strong> pesquisas investigam inflamação e efeitos pulmonares; a magnitude do efeito na população geral permanece incerta.</li>
+<li><strong>Sistema reprodutivo:</strong> estudos iniciais investigam possíveis associações com indicadores reprodutivos; os dados humanos são limitados.</li>
+<li><strong>Inflamação e estresse oxidativo:</strong> mecanismos investigados em estudos laboratoriais e animais não significam que toda pessoa exposta desenvolverá esses problemas.</li>
+<li><strong>Câncer e doenças crônicas:</strong> existem questões em investigação, mas este site não pode afirmar que a exposição cotidiana causa uma doença nem estimar risco individual.</li>
+</ul>
+<div class="info"><strong>Mensagem principal:</strong> os possíveis efeitos ainda estão sendo estudados. Tipo e tamanho das partículas, dose, via de exposição, aditivos e qualidade dos estudos importam. A OMS destaca lacunas importantes no conhecimento.</div>
+<h3>Medidas prudentes</h3><ul><li>Siga as instruções do fabricante para recipientes de alimentos e bebidas.</li><li>Evite aquecer alimentos em recipientes plásticos que não sejam próprios para esse uso.</li><li>Quando viável, reduza o uso desnecessário de plásticos descartáveis, sem presumir que todas as alternativas sejam igualmente acessíveis.</li><li>Não use o resultado do questionário para diagnosticar doenças ou decidir tratamentos.</li></ul>
+<h3>Referências científicas</h3>
+<div class="source"><strong>Organização Mundial da Saúde (2022)</strong><br><a href="https://www.who.int/publications/i/item/9789240054608" target="_blank" rel="noopener noreferrer">Dietary and inhalation exposure to nano- and microplastic particles and potential implications for human health</a><p>Relatório sobre exposição por ingestão e inalação, evidências e lacunas de conhecimento.</p></div>
+<div class="source"><strong>Organização Mundial da Saúde (2019)</strong><br><a href="https://www.who.int/publications/i/item/9789241516198" target="_blank" rel="noopener noreferrer">Microplastics in drinking-water</a><p>Revisão das evidências sobre microplásticos na água potável.</p></div>
+<div class="source"><strong>Revisão de estimativas de ingestão diária (2024)</strong><br><a href="https://pubmed.ncbi.nlm.nih.gov/39431565/" target="_blank" rel="noopener noreferrer">Registro no PubMed</a><p>Revisão de estudos de estimativa de ingestão diária; resultados dependem dos métodos e das fontes analisadas.</p></div>
+<div class="source"><strong>Microplásticos em frutos do mar</strong><br><a href="https://pubmed.ncbi.nlm.nih.gov/33355482/" target="_blank" rel="noopener noreferrer">Revisão sistemática e meta-análise no PubMed</a><p>Fonte para investigar resultados sobre alimentos marinhos; confira unidades e métodos ao comparar números.</p></div>
+</section>
+<footer>MicroVida | Projeto educativo de divulgação científica e matemática.<br>As respostas não são enviadas nem armazenadas por este site.</footer>
+</main>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+$("survey").addEventListener("submit", event => {event.preventDefault();calculateProfile();});
+$("update-chart").addEventListener("click", updateParticleChart);
+$("reset").addEventListener("click", () => {$("result-card").classList.add("hidden");$("form-card").classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"});});
 
-    <div class="glass-card" id="form-card">
-        <div class="grid-form">
-
-            <div class="form-group">
-                <label for="agua-litros">1. Consumo diário de água (litros):</label>
-                <select id="agua-litros">
-                    <option value="0.5">Até 0,5 L</option>
-                    <option value="0.75">0,75 L</option>
-                    <option value="1">1 L</option>
-                    <option value="1.25">1,25 L</option>
-                    <option value="1.5">1,5 L</option>
-                    <option value="1.75">1,75 L</option>
-                    <option value="2" selected>2 L</option>
-                    <option value="2.25">2,25 L</option>
-                    <option value="2.5">2,5 L</option>
-                    <option value="2.75">2,75 L</option>
-                    <option value="3">3 L</option>
-                    <option value="3.25">3,25 L</option>
-                    <option value="3.5">3,5 L</option>
-                    <option value="3.75">3,75 L</option>
-                    <option value="4">4 L ou mais</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="agua-origem">2. Fonte principal de água:</label>
-                <select id="agua-origem">
-                    <option value="filtro" selected>Filtro doméstico comum</option>
-                    <option value="filtro">Filtro de barro</option>
-                    <option value="filtro">Purificador com carvão ativado</option>
-                    <option value="filtro">Purificador com outro sistema de filtragem</option>
-                    <option value="torneira">Água da torneira sem filtrar</option>
-                    <option value="torneira">Água de torneira fervida</option>
-                    <option value="torneira">Bebedouro público</option>
-                    <option value="garrafa">Garrafa PET descartável, uso ocasional</option>
-                    <option value="garrafa">Garrafa PET descartável, uso diário</option>
-                    <option value="galao">Galão plástico retornável</option>
-                    <option value="galao">Água entregue em bombona plástica</option>
-                    <option value="torneira">Água de poço tratado/testado</option>
-                    <option value="torneira">Água de nascente testada</option>
-                    <option value="torneira">Água mineral em embalagem de vidro</option>
-                    <option value="torneira">Outra fonte / não sei informar</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="recipientes-quentes">
-                    3. Uso de recipientes plásticos quentes (micro-ondas/café):
-                </label>
-                <select id="recipientes-quentes">
-                    <option value="nunca">Nunca aqueço comida em plástico</option>
-                    <option value="nunca">Uso sempre vidro</option>
-                    <option value="nunca">Uso sempre cerâmica</option>
-                    <option value="nunca">Uso panela e transfiro para prato</option>
-                    <option value="as_vezes" selected>Raramente (menos de 1 vez/semana)</option>
-                    <option value="as_vezes">1 vez por semana</option>
-                    <option value="as_vezes">2 vezes por semana</option>
-                    <option value="as_vezes">3 vezes por semana</option>
-                    <option value="as_vezes">4 vezes por semana</option>
-                    <option value="as_vezes">5 vezes por semana</option>
-                    <option value="frequente">Uma vez por dia</option>
-                    <option value="frequente">Duas vezes por dia</option>
-                    <option value="frequente">Três vezes por dia</option>
-                    <option value="frequente">Uso plástico para líquidos quentes diariamente</option>
-                    <option value="frequente">Uso plástico no micro-ondas quase todos os dias</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="frutos-mar">4. Frequência de frutos do mar e peixes:</label>
-                <select id="frutos-mar">
-                    <option value="0">Nunca</option>
-                    <option value="0">Menos de 1 vez por mês</option>
-                    <option value="0">1 vez por mês</option>
-                    <option value="0">2 vezes por mês</option>
-                    <option value="1">1 vez por semana</option>
-                    <option value="1" selected>2
+function calculateProfile(){
+  const liters = Math.max(0,Math.min(20,Number.parseFloat($("agua-litros").value)||0));
+  const source = $("agua-origem").selectedIndex;
+  const sourcePoints = source <= 3 ? 1 : source <= 6 ? 2 : source <= 10 ? 5 : 2;
+  const heating = $("recipientes-quentes").value;
+  const seafood = Number.parseInt($("frutos-mar").value,10)||0;
+  const packaged = $("alimentos-embalados").value;
+  const tea = Number.parseInt($("cha-saquinho").value,10)||0;
+  const indoor = $("ar-ambiente").value;
+  const waterPoints = Math.min(25,liters*3.5+sourcePoints);
+  const packagingPoints = ({nunca:0,as_vezes:8,frequente:18}[heating]||0)+(tea===0?0:tea===2?4:8);
+  const foodPoints = (seafood===0?0:seafood===1?5:10)+({baixo:0,medio:5,alto:10}[packaged]||0);
+  const airPoints = ({baixo:2,medio:6,alto:10}[indoor]||0);
+  const groups = [
+    {id:"agua",name:"Água e bebidas",points:waterPoints,max:25},
+    {id:"embalagens",name:"Recipientes e embalagens",points:packagingPoints,max:26},
+    {id:"alimentos",name:"Dieta e alimentos",points:foodPoints,max:20},
+    {id:"ar",name:"Ar e poeira doméstica",points:airPoints,max:10}
+  ];
+  const raw = groups.reduce((sum,g)=>sum+g.points,0);
+  const score = Math.round(raw/groups.reduce((sum,g)=>sum+g.max,0)*100);
+  const denominator = raw||1, largest = Math.max(...groups.map(g=>g.points),1);
+  $("score").textContent = score+"/100";
+  groups.forEach(g=>{$("val-"+g.id).textContent=g.points+" pontos · "+Math.round(g.points/denominator*100)+"% dos pontos somados";$("bar-"+g.id).style.width=(g.points/largest*100)+"%";});
+  const highest = [...groups].sort((a,b)=>b.points-a.points)[0];
+  $("interpretacao").innerHTML="<strong>Como interpretar:</strong> seu índice educativo é "+score+"/100. O grupo com maior pontuação neste modelo é <strong>"+highest.name+"</strong>. Isso significa apenas que recebeu mais pontos pelas regras didáticas; não demonstra que seja sua maior fonte real de microplásticos.";
+  $("form-card").classList.add("hidden");$("result-card").classList.remove("hidden");updateParticleChart();window.scrollTo({top:0,behavior:"smooth"});
+}
+function updateParticleChart(){
+  const years=Math.max(1,Math.min(120,Number.parseInt($("anos-projecao").value,10)||80));$("anos-projecao").value=years;
+  const periods=[{label:"Por dia",days:1},{label:"Por semana",days:7},{label:"Por mês (30 dias)",days:30},{label:"Por semestre",days:182.5},{label:"Por ano",days:365},{label:"Vida inteira ("+years+" anos)",days:years*365}];
+  const values=periods.map(p=>({...p,low:Math.round(1414*p.days),mean:Math.round(2012*p.days),high:Math.round(2610*p.days)}));
+  const maxLog=Math.log10(Math.max(...values.map(v=>v.mean))+1);
+  const fmt=n=>new Intl.NumberFormat("pt-BR",{maximumFractionDigits:0}).format(n);
+  $("grafico-particulas").innerHTML=values.map(v=>{const width=Math.max(1.5,Math.log10(v.mean+1)/maxLog*100);return '<div class="chart-row"><div class="chart-label">'+v.label+'</div><div class="chart-track"><div class="chart-bar" style="width:'+width+'%"></div></div><div class="chart-value"><strong>Valor central: '+fmt(v.mean)+'</strong> partículas · faixa ilustrativa: '+fmt(v.low)+'–'+fmt(v.high)+'</div></div>';}).join("");
+}
+</script>
+</body>
+</html>
